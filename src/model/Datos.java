@@ -43,8 +43,8 @@ public class Datos {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(
                 "C:\\Users\\julie\\OneDrive\\Documentos\\doc_uni\\"
-                + "Programación\\Prog java\\FlowMonitor\\"
-                + "PresionTemp.txt\\"))) {
+                        + "Programación\\Prog java\\MonitoreoPlanta\\"
+                        + "PresionTemp.txt\\"))) {
             String linea;
             while ((linea = reader.readLine()) != null) {
                 String[] partes = linea.split(":");

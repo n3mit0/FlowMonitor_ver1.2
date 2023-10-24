@@ -75,7 +75,7 @@ class LecturaSerial implements SerialPortEventListener {
     public void serialEvent(SerialPortEvent spe) {
         try {
             //leer mensaje en Arduino SerialPort
-            this.msg = sp.readString(5);
+            this.msg = sp.readString(12);
             //imprimir mensaje de arduino SerialPort
             //System.out.println("Temperatura actual: " + msg); 
             Thread.sleep(200);
