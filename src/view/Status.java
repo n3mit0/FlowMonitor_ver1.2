@@ -93,7 +93,7 @@ public class Status extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Lucida Bright", 0, 18)); // NOI18N
-        jLabel4.setText("Llave");
+        jLabel4.setText("Vel motor");
 
         datoLlave.setFont(new java.awt.Font("Lucida Bright", 0, 18)); // NOI18N
         datoLlave.addActionListener(new java.awt.event.ActionListener() {
@@ -123,9 +123,9 @@ public class Status extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -219,6 +219,7 @@ public class Status extends javax.swing.JFrame {
                 
                 datoTemp.setText(String.valueOf(status.temperaturaActual())+" °C");
                 datoPresion.setText(String.valueOf(status.presionActual())+" psi");
+                datoLlave.setText(String.valueOf(status.caudalActual())+" rpm");
                 
             } catch (IOException ex) {
                 Logger.getLogger(Status.class.getName()).log(Level.SEVERE, null, ex);

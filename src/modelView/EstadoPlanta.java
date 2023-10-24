@@ -24,14 +24,17 @@ public class EstadoPlanta {
 
         // Leer el ultimo mensaje del arduino
         this.lastMsgFromArduino = this.arduino.lecturaSensor();
-
+        String[] partes = this.lastMsgFromArduino.split(":");
+        
         // Volverlo un float
-        float temperature = Float.parseFloat(lastMsgFromArduino);
+        float temperature = Float.parseFloat(partes[0]);
         float press = obtenerPresion(temperature);
+        float caudal = Float.parseFloat(partes[1]);
 
         // agregar atributos al objeto estadoActual
         this.estadoActual.settemperature(temperature);
         this.estadoActual.setPressure(press);
+        this.estadoActual.setcaudal(caudal);
 
         // guardarlos en la base de datos
         registrarDatos.elemadd(this.estadoActual.gettemperature(), this.estadoActual.getPressure());
@@ -44,6 +47,10 @@ public class EstadoPlanta {
     
     public Float presionActual(){
         return this.estadoActual.getPressure();
+    }
+    
+    public Float caudalActual(){
+        return this.estadoActual.getcaudal();
     }
 
     private Float obtenerPresion(float inTemp) {

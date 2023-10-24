@@ -19,7 +19,7 @@ import modelView.EstadoPlanta;
  */
 public class Datos {
 
-    private static LinkedHashMap<Float, Float> tempre;
+    private LinkedHashMap<Float, Float> tempre;
     //private static final HashMap<Float, Float> caupre = new HashMap<>();
     private static final CountDownLatch countDownLatch = new CountDownLatch(1);
     private LinkedHashMap<Float, Float> tabla;
