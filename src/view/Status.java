@@ -93,7 +93,7 @@ public class Status extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Lucida Bright", 0, 18)); // NOI18N
-        jLabel4.setText("Vel motor");
+        jLabel4.setText("rpm motor");
 
         datoLlave.setFont(new java.awt.Font("Lucida Bright", 0, 18)); // NOI18N
         datoLlave.addActionListener(new java.awt.event.ActionListener() {
