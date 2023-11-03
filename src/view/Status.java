@@ -224,7 +224,7 @@ public class Status extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(Status.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
-            Logger.getLogger(Status.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Status.class.getName()).log(Level.SEVERE, null, ex);
         }
              //Datos presion = new Datos(Float.valueOf());
             //datoTemp.setText(temp + "°C");

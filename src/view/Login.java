@@ -1,12 +1,16 @@
 
 package view;
 
+import javax.swing.JOptionPane;
+import model.ArduinoCom;
 
 /**
  *
  * @author berna
  */
 public class Login extends javax.swing.JFrame {
+    
+    ArduinoCom conexion;
 
     /**
      * Creates new form Login
@@ -74,9 +78,20 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botConectarActionPerformed
-        Home ventana = new Home();
-        ventana.setVisible(true);
-        dispose();
+        conexion = new ArduinoCom();
+        
+        
+        String sp = conexion.puerto();
+        
+        if ("".equals(sp)){
+            System.out.print("no hay puertos en uso");
+            JOptionPane.showMessageDialog(null, "No se ha encontrado ningún puerto de conexión");
+        }else {
+            Home ventana = new Home();
+            ventana.setVisible(true);
+            dispose();
+        }
+            
     }//GEN-LAST:event_botConectarActionPerformed
 
     /**
