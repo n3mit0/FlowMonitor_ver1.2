@@ -22,34 +22,38 @@ public class EstadoPlanta {
         this.estadoActual = new Estado();
         this.registrarDatos = new Datos();
 
-        // Leer el ultimo mensaje del arduino
-        this.lastMsgFromArduino = this.arduino.lecturaSensor();
-        String[] partes = this.lastMsgFromArduino.split(":");
+        while (true) {
+            // Leer el ultimo mensaje del arduino
+            this.lastMsgFromArduino = this.arduino.lecturaSensor();
+            String[] partes = this.lastMsgFromArduino.split(":");
+
+            // Volverlo un float
+            float temperature = Float.parseFloat(partes[0]);
+            float press = obtenerPresion(temperature);
+            float caudal = Float.parseFloat(partes[1]);
+
+            // agregar atributos al objeto estadoActual
+            this.estadoActual.settemperature(temperature);
+            this.estadoActual.setPressure(press);
+            this.estadoActual.setcaudal(caudal);
+
+            // guardarlos en la base de datos
+            registrarDatos.elemadd(this.estadoActual.gettemperature(), 
+                    this.estadoActual.getPressure());
+            Thread.sleep(5000);
+        }
         
-        // Volverlo un float
-        float temperature = Float.parseFloat(partes[0]);
-        float press = obtenerPresion(temperature);
-        float caudal = Float.parseFloat(partes[1]);
-
-        // agregar atributos al objeto estadoActual
-        this.estadoActual.settemperature(temperature);
-        this.estadoActual.setPressure(press);
-        this.estadoActual.setcaudal(caudal);
-
-        // guardarlos en la base de datos
-        registrarDatos.elemadd(this.estadoActual.gettemperature(), this.estadoActual.getPressure());
-
     }
 
     public Float temperaturaActual() {
         return this.estadoActual.gettemperature();
     }
-    
-    public Float presionActual(){
+
+    public Float presionActual() {
         return this.estadoActual.getPressure();
     }
-    
-    public Float caudalActual(){
+
+    public Float caudalActual() {
         return this.estadoActual.getcaudal();
     }
 

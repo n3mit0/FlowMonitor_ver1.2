@@ -19,63 +19,61 @@ public class ArduinoCom {
 
     public String lecturaSensor() {
         conectar();
-        while (true){
-        try {
-        sp.closePort();
-        } catch (SerialPortException ex) {
-        System.out.print("No se ha logrado cerrar el puerto");
-        //Logger.getLogger(ArduinoCom.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return this.sensor.getMsg();
+        while (true) {
+            /*try {
+            sp.closePort();
+            } catch (SerialPortException ex) {
+            System.out.print("No se ha logrado cerrar el puerto");
+            //Logger.getLogger(ArduinoCom.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
+            return this.sensor.getMsg();
         }
     }
-    
-    public String puerto(){
-        String puerto[]=SerialPortList.getPortNames();
-        String a="";
-        
-        for(String n:puerto){
+
+    public String puerto() {
+        String puerto[] = SerialPortList.getPortNames();
+        String a = "";
+
+        for (String n : puerto) {
             System.out.println(n);
             a = a + n;
         }
-        
         return a;
     }
 
     private String conectar() {
+
         this.sp = new SerialPort("COM3");
-        this.sensor = new LecturaSerial(sp);
 
-        try {
-            //abrir puerto
-            sp.openPort();
+        if (this.sp.isOpened()) {
+            this.sensor = new LecturaSerial(sp);
+        } else {
+            try {
+                //abrir puerto
+                sp.openPort();
 
-            //parámetros del puerto
-            sp.setParams(
-                    SerialPort.BAUDRATE_115200,
-                    SerialPort.DATABITS_8,
-                    SerialPort.STOPBITS_1,
-                    SerialPort.PARITY_NONE
-            );
+                //parámetros del puerto
+                sp.setParams(
+                        SerialPort.BAUDRATE_115200,
+                        SerialPort.DATABITS_8,
+                        SerialPort.STOPBITS_1,
+                        SerialPort.PARITY_NONE
+                );
 
-            sp.addEventListener(sensor,
-                    SerialPort.MASK_RXCHAR
-            );
+                sp.addEventListener(sensor,
+                        SerialPort.MASK_RXCHAR
+                );
 
-            Thread.sleep(2000);
+                Thread.sleep(2000);
 
-        } catch (SerialPortException ex) {
-            System.out.println("No se pudo conectar con el puerto");
-            //Logger.getLogger(ArduinoCom.class.getName()).log(
-               //     Level.SEVERE,
-                 //   null,
-                   // ex
-                    
-           // );
-        } catch (InterruptedException ex) {
-            System.out.println("Interrumpción en la conexión");
-            //Logger.getLogger(ArduinoCom.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SerialPortException ex) {
+                System.out.println("No se pudo conectar con el puerto");
+            } catch (InterruptedException ex) {
+                System.out.println("Interrumpción en la conexión");
+                //Logger.getLogger(ArduinoCom.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+
         return "Conexión exitosa";
     }
 

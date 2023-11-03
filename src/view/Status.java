@@ -9,12 +9,18 @@ import modelView.EstadoPlanta;
  *
  * @author berna
  */
-public class Status extends javax.swing.JFrame {
+public class Status extends javax.swing.JFrame implements Runnable {
 
     private EstadoPlanta status;
+    private String actuTemperatura;
+    private String actuPresion;
+    private String actuCaudal;
 
     public Status() {
 
+        this.actuCaudal = "";
+        this.actuPresion = "";
+        this.actuTemperatura = "";
         initComponents();
 
     }
@@ -213,22 +219,13 @@ public class Status extends javax.swing.JFrame {
 
         //String press = Float.toString(status.obtenerPresion(Float.parseFloat(dato)));
         //datoPresion.setText(press + " psi");
+        datoTemp.setText(this.actuTemperatura + " °C");
+        datoPresion.setText(this.actuPresion + " psi");
+        datoLlave.setText(this.actuCaudal + " rpm");
 
-            try {
-                status = new EstadoPlanta();
-                
-                datoTemp.setText(String.valueOf(status.temperaturaActual())+" °C");
-                datoPresion.setText(String.valueOf(status.presionActual())+" psi");
-                datoLlave.setText(String.valueOf(status.caudalActual())+" rpm");
-                
-            } catch (IOException ex) {
-                Logger.getLogger(Status.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Status.class.getName()).log(Level.SEVERE, null, ex);
-        }
-             //Datos presion = new Datos(Float.valueOf());
-            //datoTemp.setText(temp + "°C");
-        
+        //Datos presion = new Datos(Float.valueOf());
+        //datoTemp.setText(temp + "°C");
+
     }//GEN-LAST:event_botRefreshActionPerformed
 
     /**
@@ -282,4 +279,24 @@ public class Status extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
+    @Override
+    public void run() {
+        try {
+            this.status = new EstadoPlanta();
+
+            while (true) {
+
+                this.actuCaudal = String.valueOf(this.status.caudalActual());
+                this.actuPresion = String.valueOf(this.status.presionActual());
+                this.actuTemperatura = String.valueOf(this.status.temperaturaActual());
+                
+            }
+
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Status.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Status.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
 }
