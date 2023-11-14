@@ -79,19 +79,20 @@ public class Login extends javax.swing.JFrame {
 
     private void botConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botConectarActionPerformed
         conexion = new ArduinoCom();
-        
-        
         String sp = conexion.puerto();
         
         if ("".equals(sp)){
-            System.out.print("no hay puertos en uso");
-            JOptionPane.showMessageDialog(null, "No se ha encontrado ningún puerto de conexión");
+        System.out.print("no hay puertos en uso");
+        JOptionPane.showMessageDialog(null, "No se ha encontrado ningún puerto de conexión");
+        Home ventana = new Home();
+        ventana.setVisible(true);
+        dispose();
         }else {
-            Home ventana = new Home();
-            ventana.setVisible(true);
-            dispose();
+        Home ventana = new Home();
+        ventana.setVisible(true);
+        dispose();
         }
-            
+        
     }//GEN-LAST:event_botConectarActionPerformed
 
     /**

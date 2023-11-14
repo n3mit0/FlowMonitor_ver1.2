@@ -14,7 +14,6 @@ public class EstadoPlanta {
     private final Estado estadoActual;
     private final Datos registrarDatos;
     private float pressure;
-    private String lastMsgFromArduino = "";
 
     public EstadoPlanta() throws InterruptedException, IOException {
         // Instanciar los objetos que vamos a usar
@@ -23,26 +22,25 @@ public class EstadoPlanta {
         this.registrarDatos = new Datos();
 
         while (true) {
+
             // Leer el ultimo mensaje del arduino
-            this.lastMsgFromArduino = this.arduino.lecturaSensor();
-            String[] partes = this.lastMsgFromArduino.split(":");
+            float temperature = Float.parseFloat(this.arduino.obtenerValorSensor(1));
+            //float caudal = Float.parseFloat(this.arduino.obtenerValorSensor(2));
 
             // Volverlo un float
-            float temperature = Float.parseFloat(partes[0]);
             float press = obtenerPresion(temperature);
-            float caudal = Float.parseFloat(partes[1]);
 
             // agregar atributos al objeto estadoActual
             this.estadoActual.settemperature(temperature);
             this.estadoActual.setPressure(press);
-            this.estadoActual.setcaudal(caudal);
+            //this.estadoActual.setcaudal(caudal);
 
             // guardarlos en la base de datos
-            registrarDatos.elemadd(this.estadoActual.gettemperature(), 
+            registrarDatos.elemadd(this.estadoActual.gettemperature(),
                     this.estadoActual.getPressure());
             Thread.sleep(5000);
         }
-        
+
     }
 
     public Float temperaturaActual() {

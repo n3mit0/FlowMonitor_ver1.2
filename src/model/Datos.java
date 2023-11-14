@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.LinkedHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modelView.EstadoPlanta;
 
 /**
@@ -43,8 +41,8 @@ public class Datos {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(
                 "C:\\Users\\julie\\OneDrive\\Documentos\\doc_uni\\"
-                        + "Programación\\Prog java\\MonitoreoPlanta\\"
-                        + "PresionTemp.txt\\"))) {
+                + "Programación\\Prog java\\MonitoreoPlanta\\"
+                + "PresionTemp.txt\\"))) {
             String linea;
             while ((linea = reader.readLine()) != null) {
                 String[] partes = linea.split(":");
@@ -55,7 +53,8 @@ public class Datos {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error en la búsqueda");
+            //e.printStackTrace();
         }
 
         if (this.tabla.containsKey(temperatura)) {
@@ -83,8 +82,9 @@ public class Datos {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(Datos.class.getName()).log(
-                    Level.SEVERE, null, ex);
+            System.out.println("Tiempo de espera interrumpido");
+            //Logger.getLogger(Datos.class.getName()).log(
+            //      Level.SEVERE, null, ex);
         }
 
         return "Registro guardado";
@@ -108,14 +108,33 @@ public class Datos {
                         writer.write(press + ":" + temp); // Tabulador para separar los elementos
                         writer.newLine(); // Nueva línea para separar las filas
                     } catch (IOException ex) {
-                        Logger.getLogger(Datos.class.getName()).log(
-                                Level.SEVERE, null, ex);
+                        System.out.println("Error escribiendo datos");
                     }
                 });
             }
-
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(
+                "Histórico.txt", true))) {
+
+            int fil = tempre.size(); // Número de filas
+
+            for (int i = 0; i < fil; i++) {
+                tempre.entrySet().forEach(entry -> {
+                    Float press = entry.getKey();
+                    Float temp = entry.getValue();
+
+                    try {
+                        writer.write(press + ":" + temp); // Tabulador para separar los elementos
+                        writer.newLine(); // Nueva línea para separar las filas
+                    } catch (IOException ex) {
+                        System.out.println("Error escribiendo datos");
+                    }
+                });
+            }
+        } catch (IOException e) {
+            //e.printStackTrace();
         }
 
         countDownLatch.countDown();
@@ -126,7 +145,6 @@ public class Datos {
             ex.printStackTrace();
         }
         //System.out.println("Registro guardado");
-
     }
 
     private void historial() throws FileNotFoundException, IOException {
@@ -148,36 +166,55 @@ public class Datos {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error leyendo archivo");
+            //e.printStackTrace();
         }
 
-        // Imprimir tabla
+        /*// Imprimir tabla
         System.out.println("Presión  |  Temperatura");
-
+        
         this.tabla.entrySet().forEach(entry -> {
-            Float temp = entry.getKey();
-            Float press = entry.getValue();
-
-            System.out.println(press + "    =      " + temp);
-
-        });
+        Float temp = entry.getKey();
+        Float press = entry.getValue();
+        
+        System.out.println(press + "    =      " + temp);
+        
+        });*/
     }
 
     public void tablaHistorial() throws IOException {
+        try {
+            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler "
+                    + "C:\\Users\\julie\\OneDrive\\Documentos"
+                    + "\\doc_uni\\Programación\\Prog java"
+                    + "\\MonitoreoPlanta\\Histórico.txt\\");
+        } catch (IOException ex) {
+            System.out.println("Error abriendo archivo");
+            //Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public String ultimoHistorial() throws IOException {
         this.presion = new ArrayList();
         this.temperatura = new ArrayList();
+
+        String ultimo;
 
         historial();
 
         this.tabla.entrySet().forEach(entry -> {
-            Float temp = entry.getKey();
-            Float press = entry.getValue();
+            Float uno = entry.getKey();
+            Float dos = entry.getValue();
 
-            this.presion.add(Float.toString(press));
-            this.temperatura.add(Float.toString(temp));
-
+            this.presion.add(Float.toString(dos));
+            this.temperatura.add(Float.toString(uno));
         });
 
+        int a = presion.size();
+
+        ultimo = presion.get(a - 1) + ":" + temperatura.get(a - 1);
+
+        return ultimo;
     }
 
 }

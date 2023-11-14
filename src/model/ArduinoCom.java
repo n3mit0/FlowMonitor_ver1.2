@@ -1,7 +1,5 @@
 package model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
@@ -17,17 +15,13 @@ public class ArduinoCom {
     SerialPort sp;
     LecturaSerial sensor;
 
-    public String lecturaSensor() {
+    public ArduinoCom() {
+        this.sp = new SerialPort("COM3");
         conectar();
-        while (true) {
-            /*try {
-            sp.closePort();
-            } catch (SerialPortException ex) {
-            System.out.print("No se ha logrado cerrar el puerto");
-            //Logger.getLogger(ArduinoCom.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-            return this.sensor.getMsg();
-        }
+    }
+
+    private String lecturaSensor() {
+        return this.sensor.getMsg();
     }
 
     public String puerto() {
@@ -41,9 +35,15 @@ public class ArduinoCom {
         return a;
     }
 
-    private String conectar() {
+    private void escribirPuerto(int num) {
+        try {
+            sp.writeInt(num); // temperatura
+        } catch (SerialPortException ex) {
+            System.out.print("Error con el puerto");
+        }
+    }
 
-        this.sp = new SerialPort("COM3");
+    private String conectar() {
 
         if (this.sp.isOpened()) {
             this.sensor = new LecturaSerial(sp);
@@ -77,6 +77,10 @@ public class ArduinoCom {
         return "Conexión exitosa";
     }
 
+    public String obtenerValorSensor(int num) {
+        escribirPuerto(num);
+        return lecturaSensor();
+    }
 }
 
 class LecturaSerial implements SerialPortEventListener {
