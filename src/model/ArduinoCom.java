@@ -1,5 +1,6 @@
 package model;
 
+import java.util.concurrent.CountDownLatch;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
@@ -11,13 +12,22 @@ import jssc.SerialPortList;
  * @author julie
  */
 public class ArduinoCom {
-
+    
+    private static final CountDownLatch countDownLatch = new CountDownLatch(5);
     SerialPort sp;
     LecturaSerial sensor;
 
-    public ArduinoCom() {
-        this.sp = new SerialPort("COM3");
-        conectar();
+    public String ArduinoCom() {
+        String a;
+        if (!"".equals(puerto())) {
+            this.sp = new SerialPort(puerto());
+            countDownLatch.countDown();
+            a=puerto();
+            conectar();
+        } else {
+            a="Ningún puerto en uso";
+        }
+        return a;
     }
 
     private String lecturaSensor() {
@@ -38,8 +48,12 @@ public class ArduinoCom {
     private void escribirPuerto(int num) {
         try {
             sp.writeInt(num); // temperatura
+            Thread.sleep(3000);
         } catch (SerialPortException ex) {
-            System.out.print("Error con el puerto");
+            System.out.print("Error con el puerto (escritura)");
+        } catch (InterruptedException ex) {
+            System.out.print("Error con el tiempo de espera");
+            //Logger.getLogger(ArduinoCom.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -64,7 +78,9 @@ public class ArduinoCom {
                         SerialPort.MASK_RXCHAR
                 );
 
-                Thread.sleep(2000);
+                this.sensor = new LecturaSerial(sp);
+
+                Thread.sleep(3000);
 
             } catch (SerialPortException ex) {
                 System.out.println("No se pudo conectar con el puerto");

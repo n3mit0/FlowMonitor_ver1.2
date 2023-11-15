@@ -3,19 +3,22 @@ package modelView;
 import model.Datos;
 import java.io.IOException;
 import model.ArduinoCom;
+import java.util.concurrent.CountDownLatch;
+
 
 /**
  *
  * @author julie
  */
 public class EstadoPlanta {
-
+    private static final CountDownLatch countDownLatch = new CountDownLatch(5);
     private final ArduinoCom arduino;
     private final Estado estadoActual;
     private final Datos registrarDatos;
     private float pressure;
 
     public EstadoPlanta() throws InterruptedException, IOException {
+        
         // Instanciar los objetos que vamos a usar
         this.arduino = new ArduinoCom();
         this.estadoActual = new Estado();
@@ -38,6 +41,7 @@ public class EstadoPlanta {
             // guardarlos en la base de datos
             registrarDatos.elemadd(this.estadoActual.gettemperature(),
                     this.estadoActual.getPressure());
+            countDownLatch.countDown();
             Thread.sleep(5000);
         }
 

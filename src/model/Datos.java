@@ -142,7 +142,7 @@ public class Datos {
         try {
             countDownLatch.await();
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            System.out.println("Error de interrupción");//ex.printStackTrace();
         }
         //System.out.println("Registro guardado");
     }

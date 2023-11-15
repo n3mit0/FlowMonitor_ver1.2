@@ -1,6 +1,7 @@
 package view;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 import javax.swing.JOptionPane;
 import model.ArduinoCom;
 import modelView.EstadoPlanta;
@@ -10,7 +11,8 @@ import modelView.EstadoPlanta;
  * @author berna
  */
 public class Status extends javax.swing.JFrame implements Runnable {
-
+    
+    private static final CountDownLatch countDownLatch = new CountDownLatch(5);
     private EstadoPlanta status;
     private String actuTemperatura;
     private String actuPresion;
@@ -223,6 +225,7 @@ public class Status extends javax.swing.JFrame implements Runnable {
     private void botRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botRefreshActionPerformed
         //this.sensor = new ArduinoCom();
         //this.status = new Estado();
+        countDownLatch.countDown();
         if (conexionPlanta.getText().equals("Conectado")) {
             try {
                 this.status = new EstadoPlanta();
@@ -260,9 +263,14 @@ public class Status extends javax.swing.JFrame implements Runnable {
 
     private void botICaudalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botICaudalActionPerformed
 
-        if (conexionPlanta.getText().equals("Conectado")) {
+        if ((conexionPlanta.getText().equals("Conectado"))) {
             cone = new ArduinoCom();
-            datoLlave.setText(cone.obtenerValorSensor(2) + "  .");
+            if ((cone.obtenerValorSensor(2) != null)|| (!"".equals(cone.puerto()))) {
+                datoLlave.setText(cone.obtenerValorSensor(2) + "  .");
+            } else {
+                JOptionPane.showMessageDialog(null, """
+                                                Error en lectura de caudal""");
+            }
         } else {
             JOptionPane.showMessageDialog(null, """
                                                 No hay datos de entrada
@@ -329,7 +337,7 @@ public class Status extends javax.swing.JFrame implements Runnable {
 
         if ("".equals(sp)) {
             System.out.print("no hay puertos en uso");
-            JOptionPane.showMessageDialog(null, "No se ha encontrado ningún puerto de conexión");
+            //JOptionPane.showMessageDialog(null, "No se ha encontrado ningún puerto de conexión");
             conexionPlanta.setText("Desconectado");
         } else {
             conexionPlanta.setText("Conectado");
