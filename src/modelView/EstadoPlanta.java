@@ -5,30 +5,35 @@ import java.io.IOException;
 import model.ArduinoCom;
 import java.util.concurrent.CountDownLatch;
 
-
 /**
  *
  * @author julie
  */
 public class EstadoPlanta {
-    private static final CountDownLatch countDownLatch = new CountDownLatch(5);
+
+    private static final CountDownLatch countDownLatch = new CountDownLatch(10);
     private final ArduinoCom arduino;
     private final Estado estadoActual;
     private final Datos registrarDatos;
     private float pressure;
 
     public EstadoPlanta() throws InterruptedException, IOException {
-        
+
         // Instanciar los objetos que vamos a usar
         this.arduino = new ArduinoCom();
         this.estadoActual = new Estado();
         this.registrarDatos = new Datos();
-
-        while (true) {
+        
+        while (!"Ningún puerto en uso".equals(arduino.ArduinoCom())) {
 
             // Leer el ultimo mensaje del arduino
-            float temperature = Float.parseFloat(this.arduino.obtenerValorSensor(1));
-            //float caudal = Float.parseFloat(this.arduino.obtenerValorSensor(2));
+            String val = this.arduino.obtenerValorSensor(1);
+            countDownLatch.countDown();
+            float temperature = Float.parseFloat(val);
+
+            String val2 = this.arduino.obtenerValorSensor(2);
+            countDownLatch.countDown();
+            float caudal = Float.parseFloat(val2);
 
             // Volverlo un float
             float press = obtenerPresion(temperature);
@@ -36,7 +41,7 @@ public class EstadoPlanta {
             // agregar atributos al objeto estadoActual
             this.estadoActual.settemperature(temperature);
             this.estadoActual.setPressure(press);
-            //this.estadoActual.setcaudal(caudal);
+            this.estadoActual.setcaudal(caudal);
 
             // guardarlos en la base de datos
             registrarDatos.elemadd(this.estadoActual.gettemperature(),

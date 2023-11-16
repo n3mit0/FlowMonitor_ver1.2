@@ -14,16 +14,15 @@ import jssc.SerialPortList;
 public class ArduinoCom {
     
     private static final CountDownLatch countDownLatch = new CountDownLatch(5);
-    SerialPort sp;
-    LecturaSerial sensor;
+    private SerialPort sp;
+    private LecturaSerial sensor;
 
     public String ArduinoCom() {
         String a;
         if (!"".equals(puerto())) {
             this.sp = new SerialPort(puerto());
             countDownLatch.countDown();
-            a=puerto();
-            conectar();
+            a="Conectado en "+puerto();
         } else {
             a="Ningún puerto en uso";
         }
@@ -31,10 +30,12 @@ public class ArduinoCom {
     }
 
     private String lecturaSensor() {
+        conectar();
+        countDownLatch.countDown();
         return this.sensor.getMsg();
     }
 
-    public String puerto() {
+    private String puerto() {
         String puerto[] = SerialPortList.getPortNames();
         String a = "";
 
@@ -46,6 +47,7 @@ public class ArduinoCom {
     }
 
     private void escribirPuerto(int num) {
+        conectar();
         try {
             sp.writeInt(num); // temperatura
             Thread.sleep(3000);
@@ -60,25 +62,25 @@ public class ArduinoCom {
     private String conectar() {
 
         if (this.sp.isOpened()) {
-            this.sensor = new LecturaSerial(sp);
+            this.sensor = new LecturaSerial(this.sp);
         } else {
             try {
                 //abrir puerto
-                sp.openPort();
+                this.sp.openPort();
 
                 //parámetros del puerto
-                sp.setParams(
+                this.sp.setParams(
                         SerialPort.BAUDRATE_115200,
                         SerialPort.DATABITS_8,
                         SerialPort.STOPBITS_1,
                         SerialPort.PARITY_NONE
                 );
 
-                sp.addEventListener(sensor,
+                this.sp.addEventListener(sensor,
                         SerialPort.MASK_RXCHAR
                 );
 
-                this.sensor = new LecturaSerial(sp);
+                this.sensor = new LecturaSerial(this.sp);
 
                 Thread.sleep(3000);
 
@@ -95,6 +97,7 @@ public class ArduinoCom {
 
     public String obtenerValorSensor(int num) {
         escribirPuerto(num);
+        countDownLatch.countDown();
         return lecturaSensor();
     }
 }
@@ -113,10 +116,10 @@ class LecturaSerial implements SerialPortEventListener {
     public void serialEvent(SerialPortEvent spe) {
         try {
             //leer mensaje en Arduino SerialPort
-            this.msg = sp.readString(12);
+            this.msg = sp.readString();
             //imprimir mensaje de arduino SerialPort
             //System.out.println("Temperatura actual: " + msg); 
-            Thread.sleep(200);
+            Thread.sleep(2000);
         } catch (Exception e) {
             System.out.println("Error en lectura");
             //e.printStackTrace();

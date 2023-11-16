@@ -78,9 +78,9 @@ public class Login extends javax.swing.JFrame {
 
     private void botConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botConectarActionPerformed
         conexion = new ArduinoCom();
-        String sp = conexion.puerto();
+        String sp = conexion.ArduinoCom();
 
-        if ("".equals(sp)) {
+        if ("Ningún puerto en uso".equals(sp)) {
             System.out.print("no hay puertos en uso");
             JOptionPane.showMessageDialog(null, "No se ha encontrado ningún puerto de conexión");
             Home ventana = new Home();

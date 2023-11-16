@@ -12,7 +12,7 @@ import modelView.EstadoPlanta;
  */
 public class Status extends javax.swing.JFrame implements Runnable {
     
-    private static final CountDownLatch countDownLatch = new CountDownLatch(5);
+    private static final CountDownLatch countDownLatch = new CountDownLatch(10);
     private EstadoPlanta status;
     private String actuTemperatura;
     private String actuPresion;
@@ -229,6 +229,7 @@ public class Status extends javax.swing.JFrame implements Runnable {
         if (conexionPlanta.getText().equals("Conectado")) {
             try {
                 this.status = new EstadoPlanta();
+                countDownLatch.countDown();
 
                 while (true) {
 
@@ -249,7 +250,7 @@ public class Status extends javax.swing.JFrame implements Runnable {
             //datoPresion.setText(press + " psi");
             datoTemp.setText(this.actuTemperatura + " °C");
             datoPresion.setText(this.actuPresion + " psi");
-            //datoLlave.setText(this.actuCaudal + " rpm");
+            datoLlave.setText(this.actuCaudal + " rpm");
 
             //Datos presion = new Datos(Float.valueOf());
             //datoTemp.setText(temp + "°C");
@@ -264,12 +265,13 @@ public class Status extends javax.swing.JFrame implements Runnable {
     private void botICaudalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botICaudalActionPerformed
 
         if ((conexionPlanta.getText().equals("Conectado"))) {
-            cone = new ArduinoCom();
-            if ((cone.obtenerValorSensor(2) != null)|| (!"".equals(cone.puerto()))) {
-                datoLlave.setText(cone.obtenerValorSensor(2) + "  .");
+            if (this.cone != null) {
+                String a = this.cone.obtenerValorSensor(2);
+                countDownLatch.countDown();
+                datoLlave.setText(a + "  .");
             } else {
                 JOptionPane.showMessageDialog(null, """
-                                                Error en lectura de caudal""");
+                                                Error en lectura de rpm""");
             }
         } else {
             JOptionPane.showMessageDialog(null, """
@@ -332,10 +334,9 @@ public class Status extends javax.swing.JFrame implements Runnable {
     }
 
     private void conexion() {
-        cone = new ArduinoCom();
-        String sp = cone.puerto();
-
-        if ("".equals(sp)) {
+        this.cone = new ArduinoCom();
+        
+        if (this.cone.ArduinoCom().equals("Ningún puerto en uso")) {
             System.out.print("no hay puertos en uso");
             //JOptionPane.showMessageDialog(null, "No se ha encontrado ningún puerto de conexión");
             conexionPlanta.setText("Desconectado");
