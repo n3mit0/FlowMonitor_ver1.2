@@ -8,7 +8,7 @@ import model.ArduinoCom;
  * @author berna
  */
 public class Login extends javax.swing.JFrame {
-
+    
     private final ArduinoCom conexion;
     public Home ventana;
 
@@ -24,14 +24,15 @@ public class Login extends javax.swing.JFrame {
 
         Panel = new javax.swing.JPanel();
         botConectar = new javax.swing.JButton();
+        icon = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        Panel.setBackground(new java.awt.Color(108, 205, 241));
+        Panel.setBackground(new java.awt.Color(51, 153, 0));
         Panel.setPreferredSize(new java.awt.Dimension(325, 500));
 
-        botConectar.setBackground(new java.awt.Color(243, 0, 33));
-        botConectar.setFont(new java.awt.Font("Lucida Fax", 0, 14)); // NOI18N
+        botConectar.setBackground(new java.awt.Color(255, 153, 51));
+        botConectar.setFont(new java.awt.Font("Lucida Bright", 1, 18)); // NOI18N
         botConectar.setForeground(new java.awt.Color(255, 255, 255));
         botConectar.setText("Conectar");
         botConectar.addActionListener(new java.awt.event.ActionListener() {
@@ -40,21 +41,30 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/logo_FlowMonitor (1) (1) (1).png"))); // NOI18N
+
         javax.swing.GroupLayout PanelLayout = new javax.swing.GroupLayout(Panel);
         Panel.setLayout(PanelLayout);
         PanelLayout.setHorizontalGroup(
             PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelLayout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addComponent(botConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE)
+                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
+                        .addComponent(botConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(55, 55, 55))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
+                        .addComponent(icon)
+                        .addGap(67, 67, 67))))
         );
         PanelLayout.setVerticalGroup(
             PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
-                .addContainerGap(238, Short.MAX_VALUE)
+                .addContainerGap(102, Short.MAX_VALUE)
+                .addComponent(icon)
+                .addGap(49, 49, 49)
                 .addComponent(botConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(219, 219, 219))
+                .addGap(106, 106, 106))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -78,7 +88,7 @@ public class Login extends javax.swing.JFrame {
         if ("Ningún puerto en uso".equals(sp)) {
             System.out.print("no hay puertos en uso");
             JOptionPane.showMessageDialog(null, "No se ha encontrado ningún puerto de conexión");
-            this.ventana.setConexion(this.conexion);
+            //this.ventana.setConexion(this.conexion);
             this.ventana.setVisible(true);
             dispose();
         } else {
@@ -99,6 +109,7 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Panel;
-    private javax.swing.JButton botConectar;
+    public javax.swing.JButton botConectar;
+    public javax.swing.JLabel icon;
     // End of variables declaration//GEN-END:variables
 }
