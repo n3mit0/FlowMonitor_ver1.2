@@ -180,11 +180,14 @@ public class Home extends javax.swing.JFrame {
 
     private void botEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botEstadoActionPerformed
         this.estado = new Status();
+        while(this.estado.isVisible()){
+            this.setVisible(false);
+        }
         conexion();
+        this.estado.setVisible(true);
 
         //JOptionPane.showMessageDialog(null, this.arduino.verificarpuerto());
-        this.estado.setVisible(true);
-        dispose();
+                
     }//GEN-LAST:event_botEstadoActionPerformed
 
     public void setConexion(ArduinoCom conexion) {
