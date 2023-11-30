@@ -23,8 +23,8 @@ public class Status extends javax.swing.JFrame implements Runnable {
         this.actuPresion = "";
         this.actuTemperatura = "";
         initComponents();
+        this.setLocationRelativeTo(null);
         
-        //conexion();
     }
 
     @SuppressWarnings("unchecked")

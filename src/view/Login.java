@@ -16,6 +16,7 @@ public class Login extends javax.swing.JFrame {
         this.conexion = new ArduinoCom();
         this.ventana = new Home();
         initComponents();
+        this.setLocationRelativeTo(null);
         icon.setVisible(true);
     }
 

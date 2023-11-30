@@ -19,6 +19,7 @@ public class Home extends javax.swing.JFrame {
 
         this.alerta = new Ayuda();
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")
