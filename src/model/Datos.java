@@ -183,9 +183,9 @@ public class Datos {
     public void tablaHistorial() throws IOException {
         try {
             Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler "
-                    + "C:\\Users\\julie\\OneDrive\\Documentos"
-                    + "\\doc_uni\\Programación\\Prog java"
-                    + "\\MonitoreoPlanta\\Histórico.txt\\");
+                    + "C:\\Users\\julie\\OneDrive\\Documentos\\doc_uni\\"
+                    + "Programación\\Prog java\\MonitoreoPlanta\\"
+                    + "FlowMonitor\\PresionTemp.txt");
         } catch (IOException ex) {
             //System.out.println("Error abriendo archivo");
             //Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);

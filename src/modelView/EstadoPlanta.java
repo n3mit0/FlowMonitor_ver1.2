@@ -11,7 +11,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class EstadoPlanta {
 
-    private static final CountDownLatch countDownLatch = new CountDownLatch(1);
+    private static final CountDownLatch countDownLatch = new CountDownLatch(5);
     private final ArduinoCom arduino;
     private final Estado estadoActual;
     private final Datos registrarDatos;
@@ -28,7 +28,10 @@ public class EstadoPlanta {
 
             // Leer el ultimo mensaje del arduino
             String[] val = this.arduino.obtenerValorSensor("3").split(":");
-
+            try {
+                Thread.sleep(200);
+            } catch (Exception e) {
+            }
             // Volverlo un float
             float temperature = Float.parseFloat(String.valueOf(val[0]));
             float cau = obtenerCaudal(Float.parseFloat(val[1]));

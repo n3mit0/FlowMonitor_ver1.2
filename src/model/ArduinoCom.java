@@ -1,5 +1,6 @@
 package model;
 
+import java.util.concurrent.CountDownLatch;
 import javax.swing.JOptionPane;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
@@ -8,7 +9,8 @@ import jssc.SerialPortException;
 import jssc.SerialPortList;
 
 public class ArduinoCom {
-
+    
+    private static final CountDownLatch countDownLatch = new CountDownLatch(5);
     private SerialPort sp;
     private LecturaSerial sensor;
     private static String valorSensor;
@@ -17,6 +19,7 @@ public class ArduinoCom {
         String a;
         if (!"".equals(puerto())) {
             this.sp = new SerialPort(puerto());
+            conectar();
             a = "Se conectó en: " + puerto();
         } else {
             a = "Ningún puerto en uso";
@@ -36,7 +39,12 @@ public class ArduinoCom {
 
     public String verificarpuerto() {
         String a = "";
-        if (this.sp.equals("") || this.sp == null ) {
+        
+        if (this.sp.equals("") || this.sp == null) {
+            try {
+                Thread.sleep(200);
+            } catch (Exception e) {
+            }
             JOptionPane.showMessageDialog(null, "No conectado");
             a = "No conectado";
         } else {
@@ -59,7 +67,7 @@ public class ArduinoCom {
 
         try {
             sp.writeString(num); // temperatura
-            Thread.sleep(2000);
+            Thread.sleep(7000);
         } catch (SerialPortException ex) {
             System.out.print("Error con el puerto (escritura)");
         } catch (InterruptedException ex) {
@@ -81,7 +89,7 @@ public class ArduinoCom {
                     SerialPort.PARITY_NONE
             );
 
-            Thread.sleep(1000);
+            Thread.sleep(200);
 
         } catch (SerialPortException ex) {
             System.out.println("excepcion en la conexion con el puerto");
@@ -94,17 +102,17 @@ public class ArduinoCom {
     private String conectar() {
 
         if (this.sp.isOpened()) {
-            
+
             try {
-                this.sensor = new LecturaSerial(this.sp);
+                /*this.sensor = new LecturaSerial(this.sp);
                 this.sp.addEventListener(this.sensor,
-                        SerialPort.MASK_RXCHAR
-                );
+                SerialPort.MASK_RXCHAR
+                );*/
                 Thread.sleep(200);
-            } catch (SerialPortException ex) {
+                /* } catch (SerialPortException ex) {
                 System.out.println("(metodo conectar arduinoCom)1");
                 //Logger.getLogger(ArduinoCom.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
+                 */}catch (InterruptedException ex) {
                 System.out.println("(espera arduinoCom)");
                 //Logger.getLogger(ArduinoCom.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -133,15 +141,17 @@ public class ArduinoCom {
 
         return "Conexión exitosa";
     }
-    
-    public static void setMsg(String num){
-        ArduinoCom.valorSensor=num;
+
+    public static void setMsg(String num) {
+        ArduinoCom.valorSensor = num;
     }
 
     public String obtenerValorSensor(String num) {
         escribirPuerto(num);
-        //countDownLatch.countDown();
-        String a =this.valorSensor;
+        countDownLatch.countDown();
+        //String a = lecturaSensor();
+        String a = ArduinoCom.valorSensor;
+        countDownLatch.countDown();
         //System.out.print(a);
         return a;
     }
@@ -159,12 +169,16 @@ class LecturaSerial implements SerialPortEventListener {
 
     @Override
     public void serialEvent(SerialPortEvent spe) {
+        
         try {
             //leer mensaje en Arduino SerialPort
-            this.msg = sp.readString();
-            Thread.sleep(500);
-            ArduinoCom.setMsg(msg);
-            sp.removeEventListener();
+            this.msg = sp.readString() + "";
+            Thread.sleep(3000);
+            if (this.msg!=null){
+                ArduinoCom.setMsg(msg);
+            }
+            //System.out.print(msg);
+            //sp.removeEventListener();
         } catch (Exception e) {
             System.out.println("Error en lectura");
             //e.printStackTrace();
