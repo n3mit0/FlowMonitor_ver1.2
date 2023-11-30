@@ -16,8 +16,7 @@ import java.util.LinkedHashMap;
  */
 public class Datos {
 
-    private LinkedHashMap<Float, Float> tempre;
-    //private static final HashMap<Float, Float> caupre = new HashMap<>();
+    private final LinkedHashMap<Float, Float> tempre;
     private static final CountDownLatch countDownLatch = new CountDownLatch(1);
     private LinkedHashMap<Float, Float> tabla;
     public ArrayList<String> presion;
@@ -80,7 +79,7 @@ public class Datos {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
-            System.out.println("Tiempo de espera interrumpido");
+            //System.out.println("Tiempo de espera interrumpido");
             //Logger.getLogger(Datos.class.getName()).log(
             //      Level.SEVERE, null, ex);
         }
@@ -106,14 +105,14 @@ public class Datos {
                         writer.write(a + ":" + b); // Tabulador para separar los elementos
                         writer.newLine(); // Nueva línea para separar las filas
                     } catch (IOException ex) {
-                        System.out.println("Error escribiendo datos");
+                        //System.out.println("Error escribiendo datos");
                     }
                 });
             }
         } catch (IOException e) {
             //e.printStackTrace();
         }
-        
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(
                 "Histórico.txt", true))) {
 
@@ -165,7 +164,7 @@ public class Datos {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error leyendo archivo");
+            //System.out.println("Error leyendo archivo");
             //e.printStackTrace();
         }
 
@@ -188,7 +187,7 @@ public class Datos {
                     + "\\doc_uni\\Programación\\Prog java"
                     + "\\MonitoreoPlanta\\Histórico.txt\\");
         } catch (IOException ex) {
-            System.out.println("Error abriendo archivo");
+            //System.out.println("Error abriendo archivo");
             //Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

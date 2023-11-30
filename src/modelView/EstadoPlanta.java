@@ -24,14 +24,11 @@ public class EstadoPlanta {
         this.estadoActual = new Estado();
         this.registrarDatos = new Datos();
 
-        //while (!"No conectado".equals(arduino.verificarpuerto())||!"Ningún puerto en uso".equals(arduino.conexionpuerto())) {
         if (!"No conectado".equals(arduino.verificarpuerto())) {
 
             // Leer el ultimo mensaje del arduino
             String[] val = this.arduino.obtenerValorSensor("3").split(":");
-            //String a = this.arduino.obtenerValorSensor("3");
 
-            //countDownLatch.countDown();
             // Volverlo un float
             float temperature = Float.parseFloat(String.valueOf(val[0]));
             float cau = obtenerCaudal(Float.parseFloat(val[1]));
@@ -49,7 +46,6 @@ public class EstadoPlanta {
                         this.estadoActual.getPressure());
                 Thread.sleep(200);
             } catch (IOException ex) {
-                //System.out.println("a");
                 //Logger.getLogger(EstadoPlanta.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
                 //Logger.getLogger(EstadoPlanta.class.getName()).log(Level.SEVERE, null, ex);

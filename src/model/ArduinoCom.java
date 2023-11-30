@@ -17,8 +17,6 @@ public class ArduinoCom {
         String a;
         if (!"".equals(puerto())) {
             this.sp = new SerialPort(puerto());
-            //countDownLatch.countDown();
-            //JOptionPane.showMessageDialog(null, conectar());
             a = "Se conectó en: " + puerto();
         } else {
             a = "Ningún puerto en uso";
@@ -27,15 +25,12 @@ public class ArduinoCom {
     }
 
     private String lecturaSensor() {
-        //conectar();
-        //countDownLatch.countDown();
         String a = "sensor null";
         if (this.sensor.equals(null)) {
             JOptionPane.showMessageDialog(null, "no hay lectura serial");
         } else {
             a = this.sensor.getMsg();
         }
-        //System.out.println(a+"coneajsksajkas");
         return a;
     }
 
@@ -45,7 +40,6 @@ public class ArduinoCom {
             JOptionPane.showMessageDialog(null, "No conectado");
             a = "No conectado";
         } else {
-            //JOptionPane.showMessageDialog(null, this.sp);
             a = "Puerto en uso: " + this.sp;
         }
         return a;
@@ -55,7 +49,6 @@ public class ArduinoCom {
         String puerto[] = SerialPortList.getPortNames();
         String a = "";
         for (String n : puerto) {
-            //System.out.println(n);
             a = a + n;
         }
         return a;
@@ -63,8 +56,6 @@ public class ArduinoCom {
 
     private void escribirPuerto(String num) {
         conectar();
-
-        //countDownLatch.countDown();
 
         try {
             sp.writeString(num); // temperatura
@@ -172,8 +163,6 @@ class LecturaSerial implements SerialPortEventListener {
             //leer mensaje en Arduino SerialPort
             this.msg = sp.readString();
             Thread.sleep(500);
-            //imprimir mensaje de arduino SerialPort
-            //System.out.println("actual: " + msg);
             ArduinoCom.setMsg(msg);
             sp.removeEventListener();
         } catch (Exception e) {
