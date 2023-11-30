@@ -36,7 +36,7 @@ public class ArduinoCom {
 
     public String verificarpuerto() {
         String a = "";
-        if (this.sp.equals("") || this.sp == null || this.sensor.equals(null)) {
+        if (this.sp.equals("") || this.sp == null ) {
             JOptionPane.showMessageDialog(null, "No conectado");
             a = "No conectado";
         } else {

@@ -233,7 +233,6 @@ public class Home extends javax.swing.JFrame {
 
             } else {
                 //JOptionPane.showMessageDialog(null, "Conectado");
-
                 this.estado.setConexion(this.arduino);
                 estado.setConexion("Conectado");
             }
