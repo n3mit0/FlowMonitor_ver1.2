@@ -13,7 +13,7 @@ public class FlowMonitor {
         //inicio();
 
         Login ventana = new Login();
-
+        //pasar login a estadoplanta
         ventana.setVisible(true);
 
     }

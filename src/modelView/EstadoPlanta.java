@@ -11,43 +11,52 @@ import java.util.concurrent.CountDownLatch;
  */
 public class EstadoPlanta {
 
-    private static final CountDownLatch countDownLatch = new CountDownLatch(10);
+    private static final CountDownLatch countDownLatch = new CountDownLatch(1);
     private final ArduinoCom arduino;
     private final Estado estadoActual;
     private final Datos registrarDatos;
     private float pressure;
+    private float caudal;
 
-    public EstadoPlanta() throws InterruptedException, IOException {
-
+    public EstadoPlanta(ArduinoCom conexion) throws InterruptedException, IOException {
         // Instanciar los objetos que vamos a usar
-        this.arduino = new ArduinoCom();
+        this.arduino = conexion;
         this.estadoActual = new Estado();
         this.registrarDatos = new Datos();
-        
-        while (!"Ningún puerto en uso".equals(arduino.ArduinoCom())) {
+
+        //while (!"No conectado".equals(arduino.verificarpuerto())||!"Ningún puerto en uso".equals(arduino.conexionpuerto())) {
+        if (!"No conectado".equals(arduino.verificarpuerto())) {
 
             // Leer el ultimo mensaje del arduino
-            String val = this.arduino.obtenerValorSensor(1);
-            countDownLatch.countDown();
-            float temperature = Float.parseFloat(val);
+            String[] val = this.arduino.obtenerValorSensor("3").split(":");
+            //String a = this.arduino.obtenerValorSensor("3");
 
-            String val2 = this.arduino.obtenerValorSensor(2);
-            countDownLatch.countDown();
-            float caudal = Float.parseFloat(val2);
-
+            //countDownLatch.countDown();
             // Volverlo un float
+            float temperature = Float.parseFloat(String.valueOf(val[0]));
+            float cau = obtenerCaudal(Float.parseFloat(val[1]));
             float press = obtenerPresion(temperature);
 
             // agregar atributos al objeto estadoActual
-            this.estadoActual.settemperature(temperature);
             this.estadoActual.setPressure(press);
-            this.estadoActual.setcaudal(caudal);
-
-            // guardarlos en la base de datos
-            registrarDatos.elemadd(this.estadoActual.gettemperature(),
-                    this.estadoActual.getPressure());
+            this.estadoActual.settemperature(temperature);
+            this.estadoActual.setcaudal(cau);
+            
             countDownLatch.countDown();
-            Thread.sleep(5000);
+            try {
+                // guardarlos en la base de datos
+                registrarDatos.elemadd(this.estadoActual.gettemperature(),
+                        this.estadoActual.getPressure());
+                Thread.sleep(200);
+            } catch (IOException ex) {
+                //System.out.println("a");
+                //Logger.getLogger(EstadoPlanta.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                //Logger.getLogger(EstadoPlanta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } else {
+            System.out.println("Error en Estado Planta puerto Arduino");
         }
 
     }
@@ -71,8 +80,19 @@ public class EstadoPlanta {
         double funcion = (2 * (Math.pow(10, -7))) * (Math.pow(temp, 3.9246));
 
         //conversion a float 
-        this.pressure = Float.parseFloat(Double.toHexString(funcion));
+        this.pressure = Float.parseFloat(Double.toString(funcion));
 
         return this.pressure;
+    }
+
+    private Float obtenerCaudal(float num) {
+        // funcion de caudal con rpm de entrada
+        double rpm = Double.parseDouble(Float.toString(num));
+        double funcion = (rpm);
+
+        //conversion a float
+        this.caudal = Float.parseFloat(Double.toString(funcion));
+        return this.caudal;
+
     }
 }

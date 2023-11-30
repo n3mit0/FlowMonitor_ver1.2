@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.LinkedHashMap;
-import modelView.EstadoPlanta;
 
 /**
  *
@@ -23,7 +22,6 @@ public class Datos {
     private LinkedHashMap<Float, Float> tabla;
     public ArrayList<String> presion;
     public ArrayList<String> temperatura;
-    private EstadoPlanta estado;
     private float temp;
     private float press;
     private float value;
@@ -101,11 +99,11 @@ public class Datos {
 
             for (int i = 0; i < fil; i++) {
                 tempre.entrySet().forEach(entry -> {
-                    Float press = entry.getKey();
-                    Float temp = entry.getValue();
+                    Float a = entry.getKey();
+                    Float b = entry.getValue();
 
                     try {
-                        writer.write(press + ":" + temp); // Tabulador para separar los elementos
+                        writer.write(a + ":" + b); // Tabulador para separar los elementos
                         writer.newLine(); // Nueva línea para separar las filas
                     } catch (IOException ex) {
                         System.out.println("Error escribiendo datos");
@@ -115,6 +113,7 @@ public class Datos {
         } catch (IOException e) {
             //e.printStackTrace();
         }
+        
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(
                 "Histórico.txt", true))) {
 
@@ -122,11 +121,11 @@ public class Datos {
 
             for (int i = 0; i < fil; i++) {
                 tempre.entrySet().forEach(entry -> {
-                    Float press = entry.getKey();
-                    Float temp = entry.getValue();
+                    Float a = entry.getKey();
+                    Float b = entry.getValue();
 
                     try {
-                        writer.write(press + ":" + temp); // Tabulador para separar los elementos
+                        writer.write(a + ":" + b); // Tabulador para separar los elementos
                         writer.newLine(); // Nueva línea para separar las filas
                     } catch (IOException ex) {
                         System.out.println("Error escribiendo datos");

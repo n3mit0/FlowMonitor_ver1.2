@@ -1,7 +1,6 @@
 package view;
 
 import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
 import javax.swing.JOptionPane;
 import model.ArduinoCom;
 import modelView.EstadoPlanta;
@@ -12,7 +11,6 @@ import modelView.EstadoPlanta;
  */
 public class Status extends javax.swing.JFrame implements Runnable {
     
-    private static final CountDownLatch countDownLatch = new CountDownLatch(10);
     private EstadoPlanta status;
     private String actuTemperatura;
     private String actuPresion;
@@ -25,8 +23,8 @@ public class Status extends javax.swing.JFrame implements Runnable {
         this.actuPresion = "";
         this.actuTemperatura = "";
         initComponents();
-        conexion();
-
+        
+        //conexion();
     }
 
     @SuppressWarnings("unchecked")
@@ -223,21 +221,19 @@ public class Status extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_botInicioActionPerformed
 
     private void botRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botRefreshActionPerformed
-        //this.sensor = new ArduinoCom();
-        //this.status = new Estado();
-        countDownLatch.countDown();
+        /*
+        this.actuCaudal="0";
+        this.actuPresion="0";
+        this.actuTemperatura="0";*/
+        //countDownLatch.countDown();
         if (conexionPlanta.getText().equals("Conectado")) {
             try {
-                this.status = new EstadoPlanta();
-                countDownLatch.countDown();
+                this.status = new EstadoPlanta(this.cone);
+                //countDownLatch.countDown();
 
-                while (true) {
-
-                    this.actuCaudal = String.valueOf(this.status.caudalActual());
-                    this.actuPresion = String.valueOf(this.status.presionActual());
-                    this.actuTemperatura = String.valueOf(this.status.temperaturaActual());
-
-                }
+                this.actuCaudal = String.valueOf(this.status.caudalActual());
+                this.actuPresion = String.valueOf(this.status.presionActual());
+                this.actuTemperatura = String.valueOf(this.status.temperaturaActual());
 
             } catch (InterruptedException ex) {
                 System.out.print("Interrupción en la ejecución");
@@ -247,11 +243,16 @@ public class Status extends javax.swing.JFrame implements Runnable {
                 //Logger.getLogger(Status.class.getName()).log(Level.SEVERE, null, ex);
             }
             //String press = Float.toString(status.obtenerPresion(Float.parseFloat(dato)));
-            //datoPresion.setText(press + " psi");
-            datoTemp.setText(this.actuTemperatura + " °C");
-            datoPresion.setText(this.actuPresion + " psi");
-            datoLlave.setText(this.actuCaudal + " rpm");
+            if (this.actuCaudal != null && this.actuPresion != null && this.actuTemperatura != null) {
 
+                //datoPresion.setText(press + " psi");
+                datoTemp.setText(this.actuTemperatura + " °C");
+                datoPresion.setText(this.actuPresion + " psi");
+                datoLlave.setText(this.actuCaudal + " rpm");
+
+            } else {
+                conexionPlanta.setText("No se pudo leer sensor");
+            }
             //Datos presion = new Datos(Float.valueOf());
             //datoTemp.setText(temp + "°C");
         } else {
@@ -265,24 +266,15 @@ public class Status extends javax.swing.JFrame implements Runnable {
     private void botICaudalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botICaudalActionPerformed
 
         if ((conexionPlanta.getText().equals("Conectado"))) {
-            if (this.cone != null) {
-                String a = this.cone.obtenerValorSensor(2);
-                countDownLatch.countDown();
-                datoLlave.setText(a + "  .");
-            } else {
-                JOptionPane.showMessageDialog(null, """
-                                                Error en lectura de rpm""");
-            }
+            String a = this.cone.obtenerValorSensor("2");
+            //countDownLatch.countDown();
+            datoLlave.setText(a + "  rpm.");
         } else {
             JOptionPane.showMessageDialog(null, """
-                                                No hay datos de entrada
-                                                No hay puertos en uso""");
+        Error en lectura de rpm""");
         }
     }//GEN-LAST:event_botICaudalActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -314,6 +306,10 @@ public class Status extends javax.swing.JFrame implements Runnable {
         });
     }
 
+    public void setConexion(ArduinoCom conexion) {
+        this.cone = conexion;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botHistorial;
     private javax.swing.JButton botICaudal;
@@ -332,16 +328,8 @@ public class Status extends javax.swing.JFrame implements Runnable {
     @Override
     public void run() {
     }
-
-    private void conexion() {
-        this.cone = new ArduinoCom();
-        
-        if (this.cone.ArduinoCom().equals("Ningún puerto en uso")) {
-            System.out.print("no hay puertos en uso");
-            //JOptionPane.showMessageDialog(null, "No se ha encontrado ningún puerto de conexión");
-            conexionPlanta.setText("Desconectado");
-        } else {
-            conexionPlanta.setText("Conectado");
-        }
+    
+    public void setConexion(String valor){
+        conexionPlanta.setText(valor);
     }
 }
