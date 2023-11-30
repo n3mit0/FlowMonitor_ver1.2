@@ -18,7 +18,7 @@ public class ArduinoCom {
         if (!"".equals(puerto())) {
             this.sp = new SerialPort(puerto());
             //countDownLatch.countDown();
-            JOptionPane.showMessageDialog(null, conectar());
+            //JOptionPane.showMessageDialog(null, conectar());
             a = "Se conectó en: " + puerto();
         } else {
             a = "Ningún puerto en uso";
