@@ -279,9 +279,6 @@ public class Status extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_datoPresionActionPerformed
 
     private void botInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botInicioActionPerformed
-        Home inicio = new Home();
-        inicio.setVisible(true);
-
         dispose();
     }//GEN-LAST:event_botInicioActionPerformed
 
