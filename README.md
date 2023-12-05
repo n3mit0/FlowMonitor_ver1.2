@@ -48,6 +48,7 @@ En cambio, si se ha conectado correctamente el arduino, se podrá consultar la t
 Además de la funcionalidad principal de monitorear el estado de la planta. Dentro del programa, se agregó una ventana de ayuda para que el usuario se pueda comunicar con los desarrolladores del programa y de la planta. Y una ventana "AboutUs" con información de la empresa dueña de la planta procesadora. Y medios de contacto.
 
 
+
 </p>
 
 ###### Desarrollado por: Julieth Manuela Rojas Castro
