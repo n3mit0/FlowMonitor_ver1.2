@@ -50,7 +50,5 @@ Además de la funcionalidad principal de monitorear el estado de la planta. Dent
 
 </p>
 
-###### Desarrollado por:
-<p> Julieth Manuela Rojas Castro
-e-mail: julrojasc@unal.edu.co
-</p>
+###### Desarrollado por: Julieth Manuela Rojas Castro
+###### e-mail: julrojasc@unal.edu.co
